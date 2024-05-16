@@ -1,25 +1,35 @@
 import flask
-from flask import request, jsonify, render_template
+from flask import request, render_template
 from werkzeug.utils import secure_filename
 import requests
-import os
 
 
 app = flask.Flask(__name__)
 
 
+# * This is the main page of the website
 @app.route("/", methods=["GET"])
 def home():
     return render_template("index.html")
 
 
+# * This is the page for text search, it will be displayed when the song is found
 @app.route("/text_search", methods=["POST"])
 def text_search():
+    # url for the first api
+    url = "https://shazam.p.rapidapi.com/search"
+
+    headers = {
+        "X-RapidAPI-Key": "ff7711ae85msh7c32a1d09f8b33ap1c2075jsn58e69dd603d5",
+        "X-RapidAPI-Host": "shazam.p.rapidapi.com",
+    }
+
     # get data from html form
     data = request.form["data"]
-    # do something with data
 
-    url = "https://shazam.p.rapidapi.com/search"
+    # if user clicks on sumbit button without entering any data
+    if data == "":
+        return render_template("error.html")
 
     querystring = {
         "term": data,
@@ -28,14 +38,10 @@ def text_search():
         "limit": "5",
     }
 
-    headers = {
-        "X-RapidAPI-Key": "ff7711ae85msh7c32a1d09f8b33ap1c2075jsn58e69dd603d5",
-        "X-RapidAPI-Host": "shazam.p.rapidapi.com",
-    }
-
+    # get the response from the api
     response = requests.get(url, headers=headers, params=querystring)
 
-    # check if the response is empty
+    # check if the response is empty else take the data from the response
     if response.json() == {}:
         return render_template("error.html")
     else:
@@ -56,27 +62,33 @@ def text_search():
         return render_template("text.html", json=json)
 
 
-@app.route("/file_search", methods=["GET", "POST"])
+# * This is the page for file search, it will be displayed when the song is found
+@app.route("/file_search", methods=["POST"])
 def file_search():
-    if request.method == "POST":
-        f = request.files["file"]
-        f.save("mp3/" + secure_filename(f.filename))
-
-        name = "mp3/" + secure_filename(f.filename)
+    # url for the 2nd api
+    url = "https://api.audd.io/"
 
     data = {
         "api_token": "3091d8a2b76a6729160c29d6420f881c",
         "return": "apple_music,spotify",
     }
+
+    f = request.files["file"]
+
+    # if user clicks on sumbit button without uploading the sample
+    if f.filename == "":
+        return render_template("error.html")
+
+    # save the file to send to api
+    f.save("mp3/" + secure_filename(f.filename))
+    name = "mp3/" + secure_filename(f.filename)
+
     files = {
         "file": open(name, "rb"),
     }
-    result = requests.post("https://api.audd.io/", data=data, files=files)
+    result = requests.post(url, data=data, files=files)
 
-    with open("audd.json", "w") as f:
-        f.write(result.text)
-
-    # check if the response is empty: {"status":"success","result":null}
+    # check if the response is empty else take the data from the response
     if result.json()["result"] is None:
         return render_template("error.html")
     else:

@@ -14,19 +14,26 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>Song recognizer</h1>
+    <div class="main">
+      <h1>Song recognizer</h1>
 
-    <h2>Search song by name:</h2>
-    <form action="{{ url_for('text_search') }}" method="post">
-      <div class="input-container">
-        <input type="text" name="data" class="search-input" />
-        <button type="submit" class="search-button">Search</button>
-      </div>
-    </form>
+      <h2>Search song by name:</h2>
+      <form action="{{ url_for('text_search') }}" method="post">
+        <div class="input-container">
+          <input type="text" name="data" class="search-input" />
+          <button type="submit" class="search-button">Search</button>
+        </div>
+      </form>
 
-    <h2>Search song by mp3 file</h2>
-    <form action="{{ url_for('file_search') }}" method="post" enctype="multipart/form-data">
-      <input type="file" name="file" accept=".mp3"/>
-      <input type="submit" />
+      <h2>Search song by mp3 file</h2>
+      <form
+        action="{{ url_for('file_search') }}"
+        method="post"
+        enctype="multipart/form-data"
+      >
+        <input type="file" name="file" accept=".mp3" />
+        <input type="submit" />
+      </form>
+    </div>
   </body>
 </html>

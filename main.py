@@ -1,6 +1,8 @@
 import flask
 from flask import request, jsonify, render_template
+from werkzeug.utils import secure_filename
 import requests
+import os
 
 
 app = flask.Flask(__name__)
@@ -54,6 +56,29 @@ def text_search():
         }
 
         return render_template("text.html", json=json)
+
+
+@app.route("/file_search", methods=["GET", "POST"])
+def file_search():
+    if request.method == "POST":
+        f = request.files["file"]
+        f.save("mp3/" + secure_filename(f.filename))
+
+        name = "mp3/" + secure_filename(f.filename)
+
+    data = {
+        "api_token": "3091d8a2b76a6729160c29d6420f881c",
+        "return": "apple_music,spotify",
+    }
+    files = {
+        "file": open(name, "rb"),
+    }
+    result = requests.post("https://api.audd.io/", data=data, files=files)
+
+    with open("audd.json", "w") as f:
+        f.write(result.text)
+
+    return "File uploaded successfully!"
 
 
 if __name__ == "__main__":

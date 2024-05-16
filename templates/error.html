@@ -3,11 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <title>Music Explorer</title>
   </head>
   <body>
     <h1>Error</h1>
     <p>Song was not found!</p>
+    <div class="error-container">
+      <img src="{{ url_for('static', filename='loser1.jpeg') }}" alt="Error image" class="error-img">
+    </div>
     <a href="../">Back</a>
   </body>
 </html>

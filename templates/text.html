@@ -3,19 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
     />
-    <title>Document</title>
+    <title>Music Explorer</title>
   </head>
   <body>
-    <h1>Text search</h1>
+    <h1>Song Recognizer</h1>
 
     <h2>{{json.name}}</h2>
-    <img src="{{json.image}}" alt="image" />
+    <img src="{{json.image}}" alt="Album cover" />
     <a href="{{json.shazam_url}}">Go to Shazam</a>
-    <a href="{{json.apple_music_url}}">Go to Apple music</a>
+    <a href="{{json.apple_music_url}}">Go to Apple Music</a>
 
     <a href="../">Back</a>
   </body>

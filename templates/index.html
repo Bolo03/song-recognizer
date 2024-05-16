@@ -3,6 +3,14 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
     <title>Document</title>
   </head>
   <body>
@@ -10,8 +18,10 @@
 
     <h2>Search song by name:</h2>
     <form action="{{ url_for('text_search') }}" method="post">
-      <input type="text" name="data" />
-      <input type="submit" />
+      <div class="input-container">
+        <input type="text" name="data" class="search-input" />
+        <button type="submit" class="search-button">Search</button>
+      </div>
     </form>
 
     <h2>Search song by mp3 file</h2>

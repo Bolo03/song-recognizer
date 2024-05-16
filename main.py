@@ -32,22 +32,28 @@ def text_search():
     }
 
     response = requests.get(url, headers=headers, params=querystring)
+    with open("response.json", "w") as f:
+        f.write(response.text)
 
-    name = response.json()["tracks"]["hits"][0]["track"]["share"]["subject"]
-    shazam_url = response.json()["tracks"]["hits"][0]["track"]["share"]["href"]
-    image = response.json()["tracks"]["hits"][0]["track"]["share"]["image"]
-    apple_music_url = response.json()["tracks"]["hits"][0]["track"]["hub"]["options"][
-        0
-    ]["actions"][0]["uri"]
+    # check if the response is empty
+    if response.json() == {}:
+        return render_template("error.html")
+    else:
+        name = response.json()["tracks"]["hits"][0]["track"]["share"]["subject"]
+        shazam_url = response.json()["tracks"]["hits"][0]["track"]["share"]["href"]
+        image = response.json()["tracks"]["hits"][0]["track"]["share"]["image"]
+        apple_music_url = response.json()["tracks"]["hits"][0]["track"]["hub"][
+            "options"
+        ][0]["actions"][0]["uri"]
 
-    json = {
-        "name": name,
-        "shazam_url": shazam_url,
-        "image": image,
-        "apple_music_url": apple_music_url,
-    }
+        json = {
+            "name": name,
+            "shazam_url": shazam_url,
+            "image": image,
+            "apple_music_url": apple_music_url,
+        }
 
-    return render_template("text.html", json=json)
+        return render_template("text.html", json=json)
 
 
 if __name__ == "__main__":

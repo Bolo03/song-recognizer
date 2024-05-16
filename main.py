@@ -34,8 +34,6 @@ def text_search():
     }
 
     response = requests.get(url, headers=headers, params=querystring)
-    with open("response.json", "w") as f:
-        f.write(response.text)
 
     # check if the response is empty
     if response.json() == {}:
@@ -78,7 +76,24 @@ def file_search():
     with open("audd.json", "w") as f:
         f.write(result.text)
 
-    return "File uploaded successfully!"
+    # check if the response is empty: {"status":"success","result":null}
+    if result.json()["result"] is None:
+        return render_template("error.html")
+    else:
+        name = result.json()["result"]["title"]
+        artist = result.json()["result"]["artist"]
+        name = name + " - " + artist.upper()
+
+        link = result.json()["result"]["song_link"]
+        image = result.json()["result"]["spotify"]["album"]["images"][0]["url"]
+
+        json = {
+            "name": name,
+            "link": link,
+            "image": image,
+        }
+
+    return render_template("file.html", json=json)
 
 
 if __name__ == "__main__":

@@ -8,9 +8,13 @@
   <body>
     <h1>Song recognizer</h1>
 
+    <h2>Search song by name:</h2>
     <form action="{{ url_for('text_search') }}" method="post">
       <input type="text" name="data" />
       <input type="submit" />
     </form>
+
+    <h2>Search song by mp3 file</h2>
+    <h3>Upload a 5 seconds mp3 file:</h3>
   </body>
 </html>

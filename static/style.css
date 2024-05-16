@@ -16,7 +16,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 0, auto;
+  gap: 10px;
   min-height: 100vh;
   background: linear-gradient(135deg, #000000, #800080);
 }
@@ -36,6 +36,18 @@ h1 {
   align-items: center;
   justify-content: center;
   margin-bottom: 20px;
+}
+
+input[type="file"] {
+  font-size: 1em;
+}
+
+input::file-selector-button {
+  padding: 10px;
+  border: 2px solid #b3003c;
+  border-radius: 5px;
+  font-size: 1em;
+  color: #b3003c;
 }
 
 /* Style for the search input */

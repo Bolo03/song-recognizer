@@ -1,5 +1,5 @@
 import flask
-from flask import request, render_template
+from flask import request, jsonify, render_template
 from werkzeug.utils import secure_filename
 import requests
 
@@ -106,6 +106,33 @@ def file_search():
         }
 
     return render_template("file.html", json=json)
+
+
+@app.route("/error", methods=["GET"])
+def error():
+    return render_template("error.html")
+
+
+# * endpoint to clear all the files in the mp3 directory
+@app.route("/clear_mp3", methods=["GET"])
+def clear_mp3():
+    import os
+    import shutil
+
+    folder = "mp3"
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            return jsonify(
+                {"message": "Failed to delete %s. Reason: %s" % (file_path, e)}
+            )
+
+    return jsonify({"message": "All files deleted"})
 
 
 if __name__ == "__main__":
